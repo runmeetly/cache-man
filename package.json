@@ -2,7 +2,7 @@
   "name": "@runmeetly/cache-man",
   "version": "0.0.1",
   "description": "ES6, Promise based caching library with zero dependencies.",
-  "main": "dist/cache-man.js",
+  "main": "dist/cache-man.min.js",
   "repository": "https://github.com/runmeetly/cache-man",
   "author": "Peter Yamanaka <peter@runmeetly.com>",
   "license": "Apache-2.0",
