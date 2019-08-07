@@ -1,0 +1,39 @@
+{
+  "name": "cache-man",
+  "version": "0.0.1",
+  "description": "ES6, Promise based caching library with zero dependencies.",
+  "main": "dist/cache-man.js",
+  "repository": "https://github.com/runmeetly/cache-man",
+  "author": "Peter Yamanaka <peter@runmeetly.com>",
+  "license": "Apache-2.0",
+  "private": false,
+  "keywords": [
+    "cache",
+    "cacheman",
+    "cache-man",
+    "cache manager",
+    "repository",
+    "repository pattern",
+    "es6",
+    "promise"
+  ],
+  "devDependencies": {
+    "@babel/core": "7.5.5",
+    "@babel/plugin-proposal-class-properties": "7.5.5",
+    "@babel/preset-env": "7.5.5",
+    "@babel/register": "7.5.5",
+    "babel-loader": "8.0.6",
+    "cross-env": "5.2.0",
+    "prettier": "1.18.2",
+    "uglifyjs-webpack-plugin": "2.2.0",
+    "webpack": "4.39.1",
+    "webpack-cli": "3.3.6"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --progress --colors --optimize-minimize",
+    "clean-dist": "[ -e ./dist ] && [ -d ./dist ] && rm -rf ./dist",
+    "clean-modules": "[ -e ./node_modules ] && [ -d ./node_modules ] && rm -rf ./node_modules",
+    "clean": "yarn clean-dist && yarn clean-modules",
+    "prepare-publish": "yarn clean && yarn && yarn build"
+  }
+}
