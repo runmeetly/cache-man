@@ -55,19 +55,16 @@ changed in between invocations.
 `CacheMan` can help you here, let's see how:
 
 ```javascript
-import { CacheMan } from "./cache-man";
+import { CacheMan } from "@runmeetly/cache-man";
 
 class Api {
   constructor(http, database) {
-    this.http = http;
-    this.database = database;
-
     this.cachedLongNetworkCall = CacheMan.create((id, filterBy) => {
-      return this.http.get(`/api/${id}/${filterBy}`);
+      return http.get(`/api/${id}/${filterBy}`);
     });
 
     this.cachedExpensiveDatabaseCall = CacheMan.create((name, date) => {
-      return this.database.query(name).orderBy(date);
+      return database.query(name).orderBy(date);
     });
   }
 
