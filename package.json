@@ -26,8 +26,8 @@
     "cross-env": "5.2.0",
     "prettier": "1.18.2",
     "uglifyjs-webpack-plugin": "2.2.0",
-    "webpack": "4.39.1",
-    "webpack-cli": "3.3.6"
+    "webpack": "4.39.2",
+    "webpack-cli": "3.3.7"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress --colors --optimize-minimize",
