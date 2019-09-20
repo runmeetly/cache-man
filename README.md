@@ -96,7 +96,10 @@ const upstream = (...args) => {};
 const timeoutInMillis = 10000;
 const backend = new CustomStorageBackend();
 
-cacheInterface = CacheMan.create(upstream, timeoutInMillis, backend);
+cacheInterface = CacheMan.create(upstream, {
+  timeout: timeoutInMillis,
+  backend: backend
+});
 ```
 
 This `cacheInterface` has two functions: `get()` and `clear()`.
