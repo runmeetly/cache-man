@@ -18,35 +18,24 @@ import { createCache } from "./Cache";
 import { MemoryStorageBackend } from "./MemoryStorageBackend";
 
 /**
- * @typedef {{set: set, get: get}} StorageBackend
- * Creates a StorageBackend which holds its data in memory
- *
- * @private
- * @return {StorageBackend | {set: set, get: get}}
- */
-const createDefaultStorageBackend = function createDefaultStorageBackend() {
-  return MemoryStorageBackend.create();
-};
-
-/**
  * The CacheMan library
  */
 export class CacheMan {
   /**
    * Creates a new CacheMan instance
    *
-   * @param upstream - The upstream data source to fetch from. Should speak Promise.
-   * @param timeoutInMillis - Timeout in milliseconds until any data held in the cache is invalidated.
-   * @param backend - The StorageBackend that holds the cached data - held in memory by default.
+   * @typedef {{set: set, get: get}} StorageBackend
+   * @param {function} upstream - The upstream data source to fetch from. Should speak Promise.
+   * @param {{
+   *   timeout: Number,
+   *   backend: StorageBackend
+   * }} options - Options object
    * @return {CacheManClass}
    */
-  static create(upstream, timeoutInMillis = 2 * 60 * 1000, backend = null) {
-    let storageBackend = backend;
-    if (!storageBackend) {
-      // No storage backend was provided, use the default
-      storageBackend = createDefaultStorageBackend();
-    }
-
+  static create(upstream, options) {
+    const opts = options || {};
+    const timeoutInMillis = opts.timeout || 2 * 60 * 1000;
+    const storageBackend = opts.backend || MemoryStorageBackend.create();
     return createCache(upstream, timeoutInMillis, storageBackend);
   }
 }
