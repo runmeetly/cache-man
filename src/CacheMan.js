@@ -30,9 +30,9 @@ export class CacheMan {
    * @typedef {{set: set, get: get}} StorageBackend
    * @param {function} upstream - The upstream data source to fetch from. Should speak Promise.
    * @param {{
-   *   timeout: Number,
-   *   backend: StorageBackend
-   * }} options - Options object
+   *   timeout: Number?
+   *   backend: StorageBackend?
+   * }?} options - Options object
    * @return {CacheManClass}
    */
   static create(upstream, options) {
@@ -51,3 +51,4 @@ export class CacheMan {
     return createCache(upstream, timeoutInMillis, storageBackend);
   }
 }
+

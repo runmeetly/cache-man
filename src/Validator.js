@@ -21,8 +21,10 @@ import { Checker } from "./Checker";
  *
  * @private
  * @param {string} message - Provided error message
+ * @param {*} what - Error object
  */
-const error = message => {
+const error = (message, what) => {
+  console.error(message, what);
   throw new Error(message);
 };
 
@@ -38,7 +40,7 @@ export class Validator {
    */
   static resolver(resolver) {
     if (!Checker.resolver(resolver)) {
-      error("upstream must be a callback (...) -> Promise");
+      error("upstream must be a callback (...) -> Promise", resolver);
     }
 
     return resolver;
@@ -52,7 +54,10 @@ export class Validator {
    */
   static timeout(timeoutInMillis) {
     if (!Checker.timeout(timeoutInMillis)) {
-      error("timeout must be greater than 0 and less than 2^53 - 1");
+      error(
+        "timeout must be greater than 0 and less than 2^53 - 1: ",
+        timeoutInMillis
+      );
     }
 
     return timeoutInMillis;
@@ -67,7 +72,8 @@ export class Validator {
   static backend(backend) {
     if (!Checker.backend(backend)) {
       error(
-        "backend must be an object with get() and set(data, accessTime) methods!"
+        "backend must be an object with get() and set(data, accessTime) methods!",
+        backend
       );
     }
 
