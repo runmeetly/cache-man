@@ -17,6 +17,8 @@
 import { createCache } from "./Cache";
 import { MemoryStorageBackend } from "./MemoryStorageBackend";
 
+const DEFAULT_TIMEOUT = 2 * 60 * 1000;
+
 /**
  * The CacheMan library
  */
@@ -34,8 +36,17 @@ export class CacheMan {
    */
   static create(upstream, options) {
     const opts = options || {};
-    const timeoutInMillis = opts.timeout || 2 * 60 * 1000;
-    const storageBackend = opts.backend || MemoryStorageBackend.create();
+
+    let timeoutInMillis = opts.timeout;
+    if (typeof timeoutInMillis !== typeof 1) {
+      timeoutInMillis = DEFAULT_TIMEOUT;
+    }
+
+    let storageBackend = opts.backend;
+    if (!(storageBackend instanceof StorageBackend)) {
+      storageBackend = MemoryStorageBackend.create();
+    }
+
     return createCache(upstream, timeoutInMillis, storageBackend);
   }
 }
