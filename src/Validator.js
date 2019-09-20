@@ -14,23 +14,7 @@
  *    limitations under the License.
  */
 
-/**
- * Used to validate the provided resolver
- *
- * Makes sure that the resolver is of the same type as whatever the engine
- * considers a function type to be.
- * @private
- */
-const FUNCTION_TYPE = typeof function() {};
-
-/**
- * Used to validate the provided timeout
- *
- * Makes sure that the timeout is of the same type as whatever the engine
- * considers a number type to be.
- * @private
- */
-const NUMBER_TYPE = typeof 1;
+import { Checker } from "./Checker";
 
 /**
  * Throw an error
@@ -53,7 +37,7 @@ export class Validator {
    * @return {function}
    */
   static resolver(resolver) {
-    if (!resolver || typeof resolver !== FUNCTION_TYPE) {
+    if (!Checker.resolver(resolver)) {
       error("upstream must be a callback (...) -> Promise");
     }
 
@@ -67,12 +51,7 @@ export class Validator {
    * @return {Number}
    */
   static timeout(timeoutInMillis) {
-    if (
-      !timeoutInMillis ||
-      typeof timeoutInMillis !== NUMBER_TYPE ||
-      timeoutInMillis <= 0 ||
-      timeoutInMillis >= Number.MAX_SAFE_INTEGER
-    ) {
+    if (!Checker.timeout(timeoutInMillis)) {
       error("timeout must be greater than 0 and less than 2^53 - 1");
     }
 
@@ -86,9 +65,9 @@ export class Validator {
    * @return {StorageBackend}
    */
   static backend(backend) {
-    if (!backend || !backend.get || !backend.set) {
+    if (!Checker.backend(backend)) {
       error(
-        "StorageBackend must be an object with get() and set(data) methods!"
+        "backend must be an object with get() and set(data, accessTime) methods!"
       );
     }
 

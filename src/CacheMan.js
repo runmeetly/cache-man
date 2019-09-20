@@ -16,6 +16,7 @@
 
 import { createCache } from "./Cache";
 import { MemoryStorageBackend } from "./MemoryStorageBackend";
+import { Checker } from "./Checker";
 
 const DEFAULT_TIMEOUT = 2 * 60 * 1000;
 
@@ -38,12 +39,12 @@ export class CacheMan {
     const opts = options || {};
 
     let timeoutInMillis = opts.timeout;
-    if (typeof timeoutInMillis !== typeof 1) {
+    if (!Checker.timeout(timeoutInMillis)) {
       timeoutInMillis = DEFAULT_TIMEOUT;
     }
 
     let storageBackend = opts.backend;
-    if (!(storageBackend instanceof StorageBackend)) {
+    if (!Checker.backend(storageBackend)) {
       storageBackend = MemoryStorageBackend.create();
     }
 
