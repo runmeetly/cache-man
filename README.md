@@ -15,12 +15,11 @@ $ yarn add @runmeetly/cache-man
 
 ## Why
 
-`CacheMan` is an extremely simple, low attachment, easy  
-to adopt library. It was created because we needed a  
-simple way to avoid repeated network and database calls  
-while developing Meetly in its early stages, but with  
-an API which would be easy to migrate away from as the  
-application grew and matured.
+`CacheMan` is an extremely simple, low attachment, easy to adopt library.
+It was created because we needed a simple way to avoid repeated network
+and database calls while developing Meetly in its early stages, but with
+an API which would be easy to migrate away from as the application grew
+and matured.
 
 <sub>Plus its always fun to make something new!</sub>
 
@@ -45,12 +44,11 @@ class Api {
 }
 ```
 
-Both of the functions in your `Api` may take a very long time.  
-Let's assume that you run these functions to populate page data  
-each time your page is navigated to. If a user was to rapidly  
-click back and forth between your pages, you would make these  
-expensive calls over and over again - even if no data had actually  
-changed in between invocations.
+Both of the functions in your `Api` may take a very long time. Let's
+assume that you run these functions to populate page data each time your
+page is navigated to. If a user was to rapidly clicks back and forth between
+your pages, you would make these expensive calls over and over again - even
+if no data had actually changed in between invocations.
 
 `CacheMan` can help you here, let's see how:
 
@@ -78,18 +76,18 @@ class Api {
 }
 ```
 
-By wrapping function calls with `CacheMan.create`, we effectively create  
-a simple repository pattern - it will hit the network or the database as  
-long as there is no cached data, and will quickly return from the cached  
+By wrapping function calls with `CacheMan.create`, we effectively create
+a simple repository pattern - it will hit the network or the database as
+long as there is no cached data, and will quickly return from the cached
 data if it is possible.
 
 ## The CacheMan API
 
-The `CacheMan` object is the main entry point to the meat and potatoes  
-of the library. It has a single function, which takes an `upstream`  
-callback, a `timeoutInMillis`, and optionally an implementation of a  
-`StorageBackend`. It will return a new cache interface which knows how  
-to talk to and manipulate its cached data.
+The `CacheMan` object is the main entry point to the meat and potatoes of
+the library. It has a single function, which takes an `upstream` callback,
+a `timeoutInMillis`, and optionally an implementation of a `StorageBackend`.
+It will return a new cache interface which knows how to talk to and
+manipulate its cached data.
 
 ```javascript
 const upstream = (...args) => {};
@@ -112,22 +110,22 @@ cacheInterface.clear();
 
 #### get
 
-The `get()` function accepts any number of `arguments` and forwards  
-all of them to the originally passed `upstream` callback. It will  
-return a `Promise`. The `Promise` data may be new data from the  
-`upstream` or it may be data that was previously cached.
+The `get()` function accepts any number of `arguments` and forwards all
+of them to the originally passed `upstream` callback. It will return a
+`Promise`. The `Promise` data may be new data from the `upstream` or
+it may be data that was previously cached.
 
-Repeated calls to `get()` while the `upstream` function has not  
-returned any data will join to the original call and return  
-when the original `upstream` resolves it's `Promise`.
+Repeated calls to `get()` while the `upstream` function has not returned
+any data will join to the original call and return when the
+original `upstream` resolves it's `Promise`.
 
 #### clear
 
-The `clear()` function accepts no arguments and returns no data. It  
-erases the cached data - effectively "resetting" the cache interface.
+The `clear()` function accepts no arguments and returns no data. It erases
+the cached data - effectively "resetting" the cache interface.
 
-Calls to `clear()` that are made during a `get()` call will not affect  
-any of the `get()` calls up to that point.
+Calls to `clear()` that are made during a `get()` call will not affect any
+of the `get()` calls up to that point.
 
 # Credit
 
