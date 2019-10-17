@@ -85,17 +85,16 @@ data if it is possible.
 
 The `CacheMan` object is the main entry point to the meat and potatoes of
 the library. It has a single function, which takes an `upstream` callback,
-a `timeoutInMillis`, and optionally an implementation of a `StorageBackend`.
-It will return a new cache interface which knows how to talk to and
-manipulate its cached data.
+and optionally an implementation or list of implementations of a
+`StorageBackend`. It will return a new cache interface which knows how to talk
+to and manipulate its cached data.
 
 ```javascript
 const upstream = (...args) => {};
 const timeoutInMillis = 10000;
-const backend = new CustomStorageBackend();
+const backend = new CustomStorageBackend(timeoutInMillis);
 
 cacheInterface = CacheMan.create(upstream, {
-  timeout: timeoutInMillis,
   backend: backend
 });
 ```
