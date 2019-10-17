@@ -20,15 +20,13 @@ import { Validator } from "./Validator";
  * Creates a new CacheMan instance
  *
  * @private
- * @param {function} upstream - Upstream resolver function
- * @param {Number} timeoutInMillis - cache invalidation time
- * @param {StorageBackend} backend - cache StorageBackend implementation
+ * @param {Function} upstream - Upstream resolver function
+ * @param {StorageBackend | Array<StorageBackend>} backend - cache StorageBackend implementation or list of implementations
  * @return {CacheManClass}
  */
-export const createCache = (upstream, timeoutInMillis, backend) => {
+export const createCache = (upstream, backend) => {
   const _upstream = Validator.resolver(upstream);
   const _backend = Validator.backend(backend);
-  const _timeout = Validator.timeout(timeoutInMillis);
   let _work = null;
 
   /**
@@ -56,16 +54,33 @@ export const createCache = (upstream, timeoutInMillis, backend) => {
     return promise
       .then(result => {
         // Cache the fetch results for the next go around
-        _backend.set(result, accessTime);
+        _setBackend(result, accessTime);
         return result;
       })
       .catch(error => {
         // Erase cached data in the event that an error occurs
-        _backend.set(null, 0);
+        _setBackend(null, 0);
 
         // Rethrow to continue the chain
         throw error;
       });
+  };
+
+  /**
+   * Insert data into the backend - can handle if the backend is a list or just a single implementation
+   *
+   * @private
+   * @param {*} data - Data to insert
+   * @param {Number} time - Time insertion occurs
+   */
+  const _setBackend = (data, time) => {
+    if (Array.isArray(_backend)) {
+      for (const b of _backend) {
+        b.set(data, time);
+      }
+    } else {
+      _backend.set(data, time);
+    }
   };
 
   /**
@@ -96,25 +111,55 @@ export const createCache = (upstream, timeoutInMillis, backend) => {
   };
 
   /**
+   * Given cached data, evaluate it and either resolve or continue a Promise
+   *
+   * @private
+   * @param {*|undefined|null} cached - Possibly cached data
+   * @param {Number} now - Current time
+   * @param {*} resolve - Promise resolver
+   * @param {*} reject - Promise rejector
+   * @param {Array<*> | undefined} args - Function arguments
+   */
+  const _getPromise = (cached, now, resolve, reject, ...args) => {
+    if (!cached) {
+      _get(now, ...args)
+        .then(result => resolve(result))
+        .catch(error => reject(error));
+    } else {
+      resolve(cached);
+    }
+  };
+
+  /**
    * CacheMan instance which knows how to retrieve data from a cache and clear stale data.
    */
   class CacheManClass {
     /**
      * Hits the upstream and uses the caching strategy
      *
-     * @param {Array<*> | undefined } args - Arguments
+     * @param {Array<*> | undefined} args - Arguments
      * @return {Promise<*>}
      */
     get = (...args) => {
       return new Promise((resolve, reject) => {
         const now = Date.now();
-        const cached = _backend.get(_timeout);
-        if (!cached) {
-          _get(now, ...args)
-            .then(result => resolve(result))
-            .catch(error => reject(error));
+        if (Array.isArray(_backend)) {
+          let gotFromCache = false;
+          for (const b of _backend) {
+            const cached = b.get();
+            if (!!cached) {
+              _getPromise(cached, now, resolve, reject, ...args);
+              gotFromCache = true;
+              break;
+            }
+          }
+
+          if (!gotFromCache) {
+            _getPromise(null, now, resolve, reject, ...args);
+          }
         } else {
-          resolve(cached);
+          const cached = _backend.get();
+          _getPromise(cached, now, resolve, reject, ...args);
         }
       });
     };
@@ -123,7 +168,7 @@ export const createCache = (upstream, timeoutInMillis, backend) => {
      * Delete cached data and start over
      */
     clear = () => {
-      _backend.set(null, 0);
+      _setBackend(null, 0);
       _work = null;
     };
   }

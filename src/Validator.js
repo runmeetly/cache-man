@@ -35,8 +35,8 @@ export class Validator {
   /**
    * Validate that the provided resolver is present and valid
    *
-   * @param {function} resolver - Resolver function
-   * @return {function}
+   * @param {Function} resolver - Resolver function
+   * @return {Function}
    */
   static resolver(resolver) {
     if (!Checker.resolver(resolver)) {
@@ -72,7 +72,7 @@ export class Validator {
   static backend(backend) {
     if (!Checker.backend(backend)) {
       error(
-        "backend must be an object with get() and set(data, accessTime) methods!",
+        "backend must be an object with get(), set(*, number), and timeout",
         backend
       );
     }

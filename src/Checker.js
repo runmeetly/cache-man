@@ -39,8 +39,8 @@ export class Checker {
   /**
    * Check that the provided resolver is present and valid
    *
-   * @param {function} resolver - Resolver function
-   * @return {boolean}
+   * @param {Function} resolver - Resolver function
+   * @return {Boolean}
    */
   static resolver(resolver) {
     return !!resolver && typeof resolver === FUNCTION_TYPE;
@@ -50,7 +50,7 @@ export class Checker {
    * Check that the provided timeout is within allowable bounds
    *
    * @param {Number} timeoutInMillis - timeout
-   * @return {boolean}
+   * @return {Boolean}
    */
   static timeout(timeoutInMillis) {
     return (
@@ -64,10 +64,25 @@ export class Checker {
   /**
    * Check that the provided backend conforms to the StorageBackend contract
    *
-   * @param {StorageBackend} backend - Storage backend
-   * @return {boolean}
+   * @param {StorageBackend | Array<StorageBackend>} backend - Storage backend or list of storage backend objects
+   * @return {Boolean}
    */
   static backend(backend) {
-    return !!backend && !!backend.get && !!backend.set;
+    if (!backend) {
+      return false;
+    }
+
+    if (Array.isArray(backend)) {
+      let isAllValid = true;
+      for (const b of backend) {
+        if (!Checker.backend(b)) {
+          isAllValid = false;
+          break;
+        }
+      }
+      return isAllValid;
+    }
+
+    return !!backend.get && !!backend.set && Checker.timeout(backend.timeout);
   }
 }

@@ -14,23 +14,30 @@
  *    limitations under the License.
  */
 
+import { Validator } from "./Validator";
+
 /**
  * A StorageBackend which holds its data in memory and expires after a given timeout
  */
 export class MemoryStorageBackend {
   /**
-   * Creates a new MemoryStorageBackend instance
+   * Create a new storage backend backend by memory
    *
-   * @private
-   * @return {StorageBackend | {set: set, get: get}}
+   * @param {Number} timeout - Timeout in milliseconds before data is considered expired
+   * @returns {Readonly<{set: set, get: get, timeout: Number}>}
    */
-  static create() {
+  static create(timeout) {
     let storage = null;
     let lastAccessTime = 0;
 
-    return {
+    timeout = Validator.timeout(timeout);
+
+    return Object.freeze({
+      // Time after which cached data is considered expired
+      timeout,
+
       // If we have no cached data, or the cached data we do have is outside of the TTL
-      get: function(timeout) {
+      get: function() {
         if (!storage || lastAccessTime + timeout < Date.now()) {
           return null;
         } else {
@@ -38,10 +45,11 @@ export class MemoryStorageBackend {
         }
       },
 
+      // Save cached data into backend
       set: function(data, accessTime) {
         storage = data;
         lastAccessTime = accessTime;
       }
-    };
+    });
   }
 }

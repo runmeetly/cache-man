@@ -28,27 +28,20 @@ export class CacheMan {
    * Creates a new CacheMan instance
    *
    * @typedef {{set: set, get: get}} StorageBackend
-   * @param {function} upstream - The upstream data source to fetch from. Should speak Promise.
+   * @param {Function} upstream - The upstream data source to fetch from. Should speak Promise.
    * @param {{
-   *   timeout: Number?
-   *   backend: StorageBackend?
+   *   backend: * | Array<*> | null | undefined
    * }?} options - Options object
    * @return {CacheManClass}
    */
   static create(upstream, options) {
     const opts = options || {};
 
-    let timeoutInMillis = opts.timeout;
-    if (!Checker.timeout(timeoutInMillis)) {
-      timeoutInMillis = DEFAULT_TIMEOUT;
-    }
-
     let storageBackend = opts.backend;
     if (!Checker.backend(storageBackend)) {
-      storageBackend = MemoryStorageBackend.create();
+      storageBackend = MemoryStorageBackend.create(DEFAULT_TIMEOUT);
     }
 
-    return createCache(upstream, timeoutInMillis, storageBackend);
+    return createCache(upstream, storageBackend);
   }
 }
-
