@@ -17,7 +17,4 @@
 import { CacheMan } from "./CacheMan";
 import { MemoryStorageBackend } from "./MemoryStorageBackend";
 
-module.exports = {
-  CacheMan,
-  MemoryStorageBackend
-};
+export { CacheMan, MemoryStorageBackend };
