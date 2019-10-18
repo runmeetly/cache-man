@@ -44,7 +44,7 @@ if (mode === "production") {
 
 const config = {
   mode: mode || "none",
-  entry: "./src/CacheMan.js",
+  entry: "./src/index.js",
   devtool: "source-map",
   output: {
     path: path.resolve(__dirname, "dist"),
