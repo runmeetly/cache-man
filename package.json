@@ -1,6 +1,6 @@
 {
   "name": "@runmeetly/cache-man",
-  "version": "0.0.9-SNAPSHOT",
+  "version": "0.0.9",
   "description": "ES6, Promise based caching library with zero dependencies.",
   "main": "dist/cache-man.min.js",
   "repository": "https://github.com/runmeetly/cache-man",
@@ -23,16 +23,16 @@
     "promise"
   ],
   "devDependencies": {
-    "@babel/core": "7.6.4",
-    "@babel/plugin-proposal-class-properties": "7.5.5",
-    "@babel/preset-env": "7.6.3",
-    "@babel/register": "7.6.2",
+    "@babel/core": "7.7.0",
+    "@babel/plugin-proposal-class-properties": "7.7.0",
+    "@babel/preset-env": "7.7.1",
+    "@babel/register": "7.7.0",
     "babel-loader": "8.0.6",
     "cross-env": "6.0.3",
     "prettier": "1.18.2",
     "uglifyjs-webpack-plugin": "2.2.0",
-    "webpack": "4.41.0",
-    "webpack-cli": "3.3.9"
+    "webpack": "4.41.2",
+    "webpack-cli": "3.3.10"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress --colors --optimize-minimize",
