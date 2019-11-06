@@ -1,6 +1,6 @@
 {
   "name": "@runmeetly/cache-man",
-  "version": "0.1.0",
+  "version": "0.1.1-SNAPSHOT",
   "description": "ES6, Promise based caching library with zero dependencies.",
   "main": "dist/cache-man.min.js",
   "repository": "https://github.com/runmeetly/cache-man",
