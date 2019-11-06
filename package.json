@@ -7,6 +7,11 @@
   "author": "Peter Yamanaka <peter@runmeetly.com>",
   "license": "Apache-2.0",
   "private": false,
+  "files": [
+    "LICENSE",
+    "README.md",
+    "dist/"
+  ],
   "keywords": [
     "cache",
     "cacheman",
