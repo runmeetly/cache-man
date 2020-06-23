@@ -91,7 +91,7 @@ export function createCache(upstream, backend) {
   function fetchUpstream(accessTime, ...args) {
     if (result === NO_RESULT) {
       // Cache the promise object itself so that future calls to this function return the same debounced object
-      let promise = upstream.apply(this, ...args);
+      let promise = upstream.apply(this, args);
       if (!promise || !promise.then) {
         promise = Promise.resolve(promise);
       }
