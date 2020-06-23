@@ -27,12 +27,15 @@ export class CacheMan {
   /**
    * Creates a new CacheMan instance
    *
-   * @typedef {{set: set, get: get}} StorageBackend
+   * @typedef {{set: (function(*, Number): Promise<*>), get: get, clear: clear, timeout: Number, empty: Empty}} StorageBackend
+   * @typedef {{}} Empty
+   * @typedef {{get, clear}} Cache
+   *
    * @param {Function} upstream - The upstream data source to fetch from. Should speak Promise.
    * @param {{
-   *   backend: * | Array<*> | null | undefined
+   *   backend: StorageBackend | Array<StorageBackend> | null | undefined
    * }?} options - Options object
-   * @return {CacheManClass}
+   * @returns {Cache}
    */
   static create(upstream, options) {
     const opts = options || {};

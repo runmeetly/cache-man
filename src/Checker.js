@@ -40,7 +40,7 @@ export class Checker {
    * Check that the provided resolver is present and valid
    *
    * @param {Function} resolver - Resolver function
-   * @return {Boolean}
+   * @returns {Boolean}
    */
   static resolver(resolver) {
     return !!resolver && typeof resolver === FUNCTION_TYPE;
@@ -50,7 +50,7 @@ export class Checker {
    * Check that the provided timeout is within allowable bounds
    *
    * @param {Number} timeoutInMillis - timeout
-   * @return {Boolean}
+   * @returns {Boolean}
    */
   static timeout(timeoutInMillis) {
     return (
@@ -65,7 +65,7 @@ export class Checker {
    * Check that the provided backend conforms to the StorageBackend contract
    *
    * @param {StorageBackend | Array<StorageBackend>} backend - Storage backend or list of storage backend objects
-   * @return {Boolean}
+   * @returns {Boolean}
    */
   static backend(backend) {
     if (!backend) {

@@ -24,31 +24,47 @@ export class MemoryStorageBackend {
    * Create a new storage backend backend by memory
    *
    * @param {Number} timeout - Timeout in milliseconds before data is considered expired
-   * @returns {Readonly<{set: set, get: get, timeout: Number}>}
+   * @returns {Readonly<{set: (function(*, Number): Promise<*>), get: get, clear: clear, timeout: Number, empty: Empty}>}
    */
   static create(timeout) {
-    let storage = null;
-    let lastAccessTime = 0;
-
     timeout = Validator.timeout(timeout);
+
+    // noinspection UnnecessaryLocalVariableJS
+    /**
+     * NOTE: We keep this here defined as a variable so that each new cache has its own NO_RESULT object
+     * instead of all sharing a single NO_RESULT
+     * Symbol replacement - no result returned yet.
+     * @type {Empty}
+     */
+    const NO_RESULT = {};
+
+    let storage = NO_RESULT;
+    let lastAccessTime = 0;
 
     return Object.freeze({
       // Time after which cached data is considered expired
       timeout,
 
+      // What this cache considers to be "empty"
+      empty: NO_RESULT,
+
       // If we have no cached data, or the cached data we do have is outside of the TTL
-      get: function() {
-        if (!storage || lastAccessTime + timeout < Date.now()) {
-          return null;
+      get: function get() {
+        if (storage === NO_RESULT || lastAccessTime + timeout < Date.now()) {
+          return NO_RESULT;
         } else {
           return storage;
         }
       },
 
       // Save cached data into backend
-      set: function(data, accessTime) {
+      set: function set(data, accessTime) {
         storage = data;
         lastAccessTime = accessTime;
+      },
+      clear: function clear() {
+        storage = NO_RESULT;
+        lastAccessTime = 0;
       }
     });
   }

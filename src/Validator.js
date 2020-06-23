@@ -23,10 +23,10 @@ import { Checker } from "./Checker";
  * @param {string} message - Provided error message
  * @param {*} what - Error object
  */
-const error = (message, what) => {
+function error(message, what) {
   console.error(message, what);
   throw new Error(message);
-};
+}
 
 /**
  * Validator verifies that arguments given to it are valid
@@ -36,7 +36,7 @@ export class Validator {
    * Validate that the provided resolver is present and valid
    *
    * @param {Function} resolver - Resolver function
-   * @return {Function}
+   * @returns {Function}
    */
   static resolver(resolver) {
     if (!Checker.resolver(resolver)) {
@@ -50,7 +50,7 @@ export class Validator {
    * Validate that the provided timeout is within allowable bounds
    *
    * @param {Number} timeoutInMillis - timeout
-   * @return {Number}
+   * @returns {Number}
    */
   static timeout(timeoutInMillis) {
     if (!Checker.timeout(timeoutInMillis)) {
@@ -66,8 +66,8 @@ export class Validator {
   /**
    * Validate that the provided backend conforms to the StorageBackend contract
    *
-   * @param {StorageBackend} backend - Storage backend
-   * @return {StorageBackend}
+   * @param {StorageBackend|Array<StorageBackend>} backend - Storage backend
+   * @returns {StorageBackend|Array<StorageBackend>}
    */
   static backend(backend) {
     if (!Checker.backend(backend)) {
