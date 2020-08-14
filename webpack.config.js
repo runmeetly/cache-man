@@ -49,10 +49,9 @@ const config = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: outputFile,
-    library: "CacheMan",
+    library: libraryName,
     libraryTarget: "umd",
-    umdNamedDefine: true,
-    globalObject: "this"
+    umdNamedDefine: true
   },
   module: {
     rules: [
